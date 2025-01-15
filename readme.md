@@ -1,6 +1,8 @@
 # Langkah-langkah Konfigurasi Materi MTCRE
 
 ## Kofigurasi LB-ECMP
+### TOPOLOGI LB ECMP
+![Topologi](../MTCRE/topologi-lb.jpg)
 ### Bagian Pertama: Konfigurasi IP Address
 #### ISP-A
 Konfigurasi DHCP CLient
@@ -123,3 +125,5 @@ Uji Konektifitas
 ping google.com
 trace google.com
 ```
+
+[def]: ../topologi-lb.jpg
