@@ -1,11 +1,11 @@
 # Langkah-langkah Konfigurasi Materi MTCRE
 
-## Kofigurasi LB-ECMP
+## Konfigurasi LB-ECMP
 ### TOPOLOGI LB ECMP
 ![Topologi](https://github.com/saifulindo/MTCRE/raw/master/topologi-lb.jpg)
 ### Bagian Pertama: Konfigurasi IP Address
 #### ISP-A
-Konfigurasi DHCP CLient
+Konfigurasi DHCP Client
 **Note**: Sesuaikan dengan interface yang terpasang pada link.
 ```bash
 ip dhcp-client pr
@@ -26,7 +26,7 @@ ip address add address=10.10.10.1/30
 ```
 
 #### ISP-B
-Konfigurasi DHCP CLient
+Konfigurasi DHCP Client
 **Note**: Sesuaikan dengan interface yang terpasang pada link.
 ```bash
 ip dhcp-client pr
@@ -55,7 +55,7 @@ ip address add address=10.10.10.2/30
 ip address add address=11.11.11.2/30
 ip address add address=192.168.XX.1/24
 ```
-Uji Konektifitas
+Uji Konektivitas
 ```bash
 ping 10.10.10.1
 ping 11.11.11.1
@@ -64,15 +64,15 @@ ping 11.11.11.1
 #### PC1
 Konfigurasi IP Address dan DNS
 ```bash
-ip 192.168.XX.1/24 192.168.XX.1
+ip 192.168.XX.2/24 192.168.XX.1
 ip dns 10.10.10.1 11.11.11.1
 ```
-Uji Konektifitas
+Uji Konektivitas
 ```bash
 ping 192.168.XX.1
 ```
 
-### Bagian Kedua: Konfiruasi NAT dan Allow Remote Request
+### Bagian Kedua: Konfigurasi NAT dan Allow Remote Request
 #### ISP-A
 Konfigurasi NAT
 **Note**: `out-interface` disesuaikan dengan link yang terpasang
@@ -80,7 +80,7 @@ Konfigurasi NAT
 ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
 ip firewall nat print
 ```
-Konfigurasi Allow remote Request
+Konfigurasi Allow Remote Request
 ```bash
 ip dns set allow-remote-requests=yes
 ip dns pr
@@ -92,7 +92,7 @@ Konfigurasi NAT
 ip firewall nat add chain=srcnat out-interface=ether1 action=masquerade
 ip firewall nat print
 ```
-Konfigurasi Allow remote Request
+Konfigurasi Allow Remote Request
 ```bash
 ip dns set allow-remote-requests=yes
 ip dns pr
@@ -107,20 +107,20 @@ ip firewall nat print
 
 ### Bagian Ketiga: Konfigurasi LB ECMP dan DNS
 #### Router Kantor
-KOnfigurasi Load Balancing ECMP
+Konfigurasi Load Balancing ECMP
 ```bash
 ip route add dst-address=0.0.0.0/0 gateway=10.10.10.1,11.11.11.1
 ip route pr
 ```
-KOnfigurasi DNS Router Kantor
+Konfigurasi DNS Router Kantor
 ```bash
 ip dns set servers=10.10.10.1,11.11.11.1
 ip dns pr
 ```
 
-### Bagian Keempat: Verifikasi CLient
+### Bagian Keempat: Verifikasi Client
 #### PC1
-Uji Konektifitas 
+Uji Konektivitas 
 ```bash
 ping google.com
 trace google.com
