@@ -2,7 +2,7 @@
 
 ## Kofigurasi LB-ECMP
 ### TOPOLOGI LB ECMP
-![Topologi](../MTCRE/topologi-lb.jpg)
+![Topologi](https://github.com/saifulindo/MTCRE/raw/master/topologi-lb.jpg)
 ### Bagian Pertama: Konfigurasi IP Address
 #### ISP-A
 Konfigurasi DHCP CLient
