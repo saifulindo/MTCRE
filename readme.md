@@ -166,6 +166,7 @@ ip route pr
 ```
 ### Bagian Kedua: Pengujian File Over
 #### R-Kantor
+Disable Interface yang mengarah ke ISP-A
 ```bash
 interface disable number=0
 ip route pr
