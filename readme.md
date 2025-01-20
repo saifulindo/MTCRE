@@ -125,5 +125,50 @@ Uji Konektivitas
 ping google.com
 trace google.com
 ```
+---
+
+## Konfigurasi Fail Over
+### Bagian Pertama: Disable Konfigurasi LB ECMP
+#### R-Kantor
+Lakukan disable LB ECMP pada Router Kantor
+```bash
+ip route disable number=0
+ip route pr
+Flags: X - disabled, A - active, D - dynamic, C - connect, S - static, r - rip, b - bgp, o - ospf, m - mme,
+B - blackhole, U - unreachable, P - prohibit
+ #      DST-ADDRESS        PREF-SRC        GATEWAY            DISTANCE
+ 0 X S  0.0.0.0/0                          10.10.10.1                1
+                                           11.11.11.1
+ 1 ADC  10.10.10.0/30      10.10.10.2      ether1                    0
+ 2 ADC  11.11.11.0/30      11.11.11.2      ether2                    0
+ 3 ADC  192.168.10.0/24    192.168.10.1    ether3                    0
+```
+Tambahkan routing ke big-zero secara terpisah
+```bash
+ip route add dst-address=0.0.0.0/0 gateway=10.10.10.1
+ip route add dst-address=0.0.0.0/0 gateway=11.11.11.1
+ip route pr
+Flags: X - disabled, A - active, D - dynamic, C - connect, S - static, r - rip, b - bgp, o - ospf, m - mme,
+B - blackhole, U - unreachable, P - prohibit
+ #      DST-ADDRESS        PREF-SRC        GATEWAY            DISTANCE
+ 0 X S  0.0.0.0/0                          10.10.10.1                1
+                                           11.11.11.1
+ 1 A S  0.0.0.0/0                          11.11.11.1                1
+ 2   S  0.0.0.0/0                          10.10.10.1                1
+ 3 ADC  10.10.10.0/30      10.10.10.2      ether1                    0
+ 4 ADC  11.11.11.0/30      11.11.11.2      ether2                    0
+ 5 ADC  192.168.10.0/24    192.168.10.1    ether3                    0
+```
+Atur distance yang menuju ke ISP-B menjadi 2
+```bash
+ip route set number=2 distance=2
+ip route pr
+```
+### Bagian Kedua: Pengujian File Over
+#### R-Kantor
+```bash
+interface disable number=0
+ip route pr
+```
 
 [def]: ../topologi-lb.jpg
