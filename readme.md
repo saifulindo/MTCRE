@@ -125,6 +125,7 @@ Uji Konektivitas
 ping google.com
 trace google.com
 ```
+
 ---
 
 ## Konfigurasi Fail Over
@@ -171,10 +172,11 @@ Disable Interface yang mengarah ke ISP-A
 interface disable number=0
 ip route pr
 ```
+
 ---
 
-## KOnfigurasi Load Balancing PCC
-### Bagian Pertama: KOnfigurasi Firewall Mangle
+## Konfigurasi Load Balancing PCC
+### Bagian Pertama: Konfigurasi Firewall Mangle
 #### R-Kantor
 ```bash
 ip firewall mangle add add chain=prerouting in-interface=ether3 dst-address-type=!local per-connection-classifier=both-addresses-and-ports:2/0 action=mark-connection new-connection-mark=ISPA_conn passthrough=yes
