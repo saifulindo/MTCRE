@@ -171,5 +171,40 @@ Disable Interface yang mengarah ke ISP-A
 interface disable number=0
 ip route pr
 ```
+---
 
+## KOnfigurasi Load Balancing PCC
+### Bagian Pertama: KOnfigurasi Firewall Mangle
+#### R-Kantor
+```bash
+ip firewall mangle add add chain=prerouting in-interface=ether3 dst-address-type=!local per-connection-classifier=both-addresses-and-ports:2/0 action=mark-connection new-connection-mark=ISPA_conn passthrough=yes
+ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local per-connection-classifier=both-addresses-and-ports:2/1 action=mark-connection new-connection-mark=ISPB_conn passthrough=yes
+
+ip firewall mangle add chain=prerouting connection-mark=ISPA_conn in-interface=ether3 action=mark-routing new-routing-mark=ISPA
+ip firewall mangle add chain=prerouting connection-mark=ISPB_conn in-interface=ether3 action=mark-routing new-routing-mark=ISPB
+```
+Verifikasi `ip route` R Kantor:
+```bash
+ip route pr
+Flags: X - disabled, A - active, D - dynamic, C - connect, S - static, r - rip, b - bgp, o - ospf, m - mme,
+B - blackhole, U - unreachable, P - prohibit
+ #      DST-ADDRESS        PREF-SRC        GATEWAY            DISTANCE
+ 0 A S  0.0.0.0/0                          10.10.10.1                1
+ 1   S  0.0.0.0/0                          11.11.11.1                2
+ 2 X S  0.0.0.0/0                          10.10.10.1                1
+                                           11.11.11.1
+ 3 ADC  10.10.10.0/30      10.10.10.2      ether1                    0
+ 4 ADC  11.11.11.0/30      11.11.11.2      ether2                    0
+ 5 ADC  192.168.10.0/24    192.168.10.1    ether3                    0
+ip route set numbers=0 routing_mark=ISPA check-gateway=ping
+ip route set numbers=1 routing_mark=ISPB check-gateway=ping
+ip route pr
+```
+### Bagian Kedua: Verifikasi Client
+#### PC1
+Uji Konektivitas 
+```bash
+ping google.com
+trace google.com
+```
 [def]: ../topologi-lb.jpg
