@@ -179,7 +179,7 @@ ip route pr
 ### Bagian Pertama: Konfigurasi Firewall Mangle
 #### R-Kantor
 ```bash
-ip firewall mangle add add chain=prerouting in-interface=ether3 dst-address-type=!local per-connection-classifier=both-addresses-and-ports:2/0 action=mark-connection new-connection-mark=ISPA_conn passthrough=yes
+ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local per-connection-classifier=both-addresses-and-ports:2/0 action=mark-connection new-connection-mark=ISPA_conn passthrough=yes
 ip firewall mangle add chain=prerouting in-interface=ether3 dst-address-type=!local per-connection-classifier=both-addresses-and-ports:2/1 action=mark-connection new-connection-mark=ISPB_conn passthrough=yes
 
 ip firewall mangle add chain=prerouting connection-mark=ISPA_conn in-interface=ether3 action=mark-routing new-routing-mark=ISPA
